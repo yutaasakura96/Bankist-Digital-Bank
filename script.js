@@ -29,7 +29,7 @@ const account4 = {
 };
 
 const accounts = [account1, account2, account3, account4];
-
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -56,7 +56,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-// MOVEMENTS
+// DISPLAY MOVEMENTS
 
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
@@ -76,6 +76,12 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+calcDisplayBalance(account1.movements);
+
 // COMPUTING USERNAMES
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -88,3 +94,22 @@ const createUsernames = function (accs) {
 };
 createUsernames(accounts);
 console.log(accounts);
+
+// TEMP
+//FILTER METHOD
+const deposits = movements.filter(mov => mov > 0);
+console.log(movements);
+console.log(deposits);
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+// COMPUTING THE TOTAL CURRENT BALANCE
+// REDUCE METHOD
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+
+// MAXIMUM VALUE OF THE MOVEMENTS ARRAY
+const max = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]);
+console.log(max);
