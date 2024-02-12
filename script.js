@@ -57,7 +57,6 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // DISPLAY MOVEMENTS
-
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach(function (mov, i) {
@@ -68,7 +67,7 @@ const displayMovements = function (movements) {
       <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-      <div class="movements__value">${mov}</div>
+      <div class="movements__value">${mov}€</div>
     </div>
   `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -76,11 +75,37 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+// DISPLAY BALANCE
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+  labelBalance.textContent = `${balance} €`;
 };
 calcDisplayBalance(account1.movements);
+
+// DISPLAY INCOMES
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+  // DISPLAY OUT/WITHDRAWALS
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+
+  // DISPLAY INTEREST
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
+};
+calcDisplaySummary(account1.movements);
 
 // COMPUTING USERNAMES
 const createUsernames = function (accs) {
@@ -113,3 +138,10 @@ const max = movements.reduce((acc, mov) => {
   else return mov;
 }, movements[0]);
 console.log(max);
+
+const eurToUsd = 1.1;
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD);
