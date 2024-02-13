@@ -73,39 +73,35 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 // DISPLAY BALANCE
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} €`;
 };
-calcDisplayBalance(account1.movements);
 
 // DISPLAY INCOMES
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
   // DISPLAY OUT/WITHDRAWALS
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
   // DISPLAY INTEREST
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
-      console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1.movements);
 
 // COMPUTING USERNAMES
 const createUsernames = function (accs) {
@@ -118,30 +114,68 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
-console.log(accounts);
+
+// EVENT HANDLERS
+// LOGIN FUNCTIONALITY
+let currentAccount;
+btnLogin.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // DISPLAY UI AND WELCOME MESSAGE
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    // CLEAR INPUT FIELDS
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+    // DISPLAY MOVEMENTS
+    displayMovements(currentAccount.movements);
+    // DISPLAY BALANCE
+    calcDisplayBalance(currentAccount.movements);
+    // DISPLAY SUMMARY
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 // TEMP
-//FILTER METHOD
-const deposits = movements.filter(mov => mov > 0);
-console.log(movements);
-console.log(deposits);
-const withdrawals = movements.filter(mov => mov < 0);
-console.log(withdrawals);
+// //FILTER METHOD
+// const deposits = movements.filter(mov => mov > 0);
+// console.log(movements);
+// console.log(deposits);
+// const withdrawals = movements.filter(mov => mov < 0);
+// console.log(withdrawals);
 
-// COMPUTING THE TOTAL CURRENT BALANCE
-// REDUCE METHOD
-const balance = movements.reduce((acc, cur) => acc + cur, 0);
+// // COMPUTING THE TOTAL CURRENT BALANCE
+// // REDUCE METHOD
+// const balance = movements.reduce((acc, cur) => acc + cur, 0);
 
-// MAXIMUM VALUE OF THE MOVEMENTS ARRAY
-const max = movements.reduce((acc, mov) => {
-  if (acc > mov) return acc;
-  else return mov;
-}, movements[0]);
-console.log(max);
+// // MAXIMUM VALUE OF THE MOVEMENTS ARRAY
+// const max = movements.reduce((acc, mov) => {
+//   if (acc > mov) return acc;
+//   else return mov;
+// }, movements[0]);
+// console.log(max);
 
-const eurToUsd = 1.1;
-const totalDepositsUSD = movements
-  .filter(mov => mov > 0)
-  .map(mov => mov * eurToUsd)
-  .reduce((acc, mov) => acc + mov, 0);
-console.log(totalDepositsUSD);
+// const eurToUsd = 1.1;
+// const totalDepositsUSD = movements
+//   .filter(mov => mov > 0)
+//   .map(mov => mov * eurToUsd)
+//   .reduce((acc, mov) => acc + mov, 0);
+// console.log(totalDepositsUSD);
+
+// // FIND METHOD
+// // finding only one element and returns a variable that is not an array
+// const firstWithdrawal = movements.find(mov => mov < 0);
+// console.log(firstWithdrawal);
+
+// console.log(accounts);
+
+// const account = accounts.find(acc => acc.owner === 'Waldo Emerson');
+// console.log(account);
