@@ -158,6 +158,7 @@ btnTransfer.addEventListener('click', function (event) {
   const recieverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
+  // CLEAR INPUT FIELD
   inputTransferAmount.value = inputTransferTo.value = '';
   // CHECKING TRANSFER AMOUNT
   if (
@@ -173,6 +174,27 @@ btnTransfer.addEventListener('click', function (event) {
     // UPDATING THE UI
     updateUI(currentAccount);
   }
+});
+
+// CLOSE ACCOUNT FUNCTIONALITY
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    // DELETING THE ACCOUNT
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    accounts.splice(index, 1);
+
+    // HIDE UI
+    containerApp.style.opacity = 0;
+  }
+  //CLEAR INPUT FIELD
+  inputCloseUsername.value = inputClosePin.value = '';
 });
 // TEMP
 // //FILTER METHOD
