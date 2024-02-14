@@ -57,9 +57,12 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // DISPLAY MOVEMENTS
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
+  // SORTING MOVEMENTS FUNCTIONALITY
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -211,60 +214,13 @@ btnClose.addEventListener('click', function (e) {
   //CLEAR INPUT FIELD
   inputCloseUsername.value = inputClosePin.value = '';
 });
+
+// SORT BUTTON FUNCTIONALITY
+let sorted = false;
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 // TEMP
-/*
-//FILTER METHOD
-const deposits = movements.filter(mov => mov > 0);
-console.log(movements);
-console.log(deposits);
-const withdrawals = movements.filter(mov => mov < 0);
-console.log(withdrawals);
-
-// COMPUTING THE TOTAL CURRENT BALANCE
-// REDUCE METHOD
-const balance = movements.reduce((acc, cur) => acc + cur, 0);
-
-// MAXIMUM VALUE OF THE MOVEMENTS ARRAY
-const max = movements.reduce((acc, mov) => {
-  if (acc > mov) return acc;
-  else return mov;
-}, movements[0]);
-console.log(max);
-
-const eurToUsd = 1.1;
-const totalDepositsUSD = movements
-  .filter(mov => mov > 0)
-  .map(mov => mov * eurToUsd)
-  .reduce((acc, mov) => acc + mov, 0);
-console.log(totalDepositsUSD);
-
-// FIND METHOD
-// finding only one element and returns a variable that is not an array
-const firstWithdrawal = movements.find(mov => mov < 0);
-console.log(firstWithdrawal);
-
-console.log(accounts);
-
-const account = accounts.find(acc => acc.owner === 'Waldo Emerson');
-console.log(account);
-
-// EQUALITY
-console.log(movements);
-console.log(movements.includes(-130));
-// SOME METHOD
-// EQUALITY
-console.log(movements.some(mov => mov === -130));
-// CONDITION
-const anyDeposits = movements.some(mov => mov > 0);
-console.log(anyDeposits);
-
-// EVERY METHOD
-console.log(movements.every(mov => mov > 0));
-console.log(account4.movements.every(mov => mov > 0));
-
-// SEPERATE CALLBACK
-const deposit = mov => mov > 0;
-console.log(movements.some(deposit));
-console.log(movements.every(deposit));
-console.log(movements.filter(deposit));
-*/
