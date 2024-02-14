@@ -151,9 +151,24 @@ btnLogin.addEventListener('click', function (event) {
   }
 });
 
+// REQUEST A LOAN FUNCTIONALITY
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // ADD MOVEMENT
+    currentAccount.movements.push(amount);
+
+    // UPDATE UI
+    updateUI(currentAccount);
+  }
+  // CLEAR INPUT FIELD
+  inputLoanAmount.value = '';
+});
+
 // TRANSFER MONEY FUNCTIONALITY
-btnTransfer.addEventListener('click', function (event) {
-  event.preventDefault();
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
   const amount = Number(inputTransferAmount.value);
   const recieverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
@@ -197,37 +212,59 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 // TEMP
-// //FILTER METHOD
-// const deposits = movements.filter(mov => mov > 0);
-// console.log(movements);
-// console.log(deposits);
-// const withdrawals = movements.filter(mov => mov < 0);
-// console.log(withdrawals);
+/*
+//FILTER METHOD
+const deposits = movements.filter(mov => mov > 0);
+console.log(movements);
+console.log(deposits);
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
 
-// // COMPUTING THE TOTAL CURRENT BALANCE
-// // REDUCE METHOD
-// const balance = movements.reduce((acc, cur) => acc + cur, 0);
+// COMPUTING THE TOTAL CURRENT BALANCE
+// REDUCE METHOD
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
 
-// // MAXIMUM VALUE OF THE MOVEMENTS ARRAY
-// const max = movements.reduce((acc, mov) => {
-//   if (acc > mov) return acc;
-//   else return mov;
-// }, movements[0]);
-// console.log(max);
+// MAXIMUM VALUE OF THE MOVEMENTS ARRAY
+const max = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]);
+console.log(max);
 
-// const eurToUsd = 1.1;
-// const totalDepositsUSD = movements
-//   .filter(mov => mov > 0)
-//   .map(mov => mov * eurToUsd)
-//   .reduce((acc, mov) => acc + mov, 0);
-// console.log(totalDepositsUSD);
+const eurToUsd = 1.1;
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD);
 
-// // FIND METHOD
-// // finding only one element and returns a variable that is not an array
-// const firstWithdrawal = movements.find(mov => mov < 0);
-// console.log(firstWithdrawal);
+// FIND METHOD
+// finding only one element and returns a variable that is not an array
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(firstWithdrawal);
 
-// console.log(accounts);
+console.log(accounts);
 
-// const account = accounts.find(acc => acc.owner === 'Waldo Emerson');
-// console.log(account);
+const account = accounts.find(acc => acc.owner === 'Waldo Emerson');
+console.log(account);
+
+// EQUALITY
+console.log(movements);
+console.log(movements.includes(-130));
+// SOME METHOD
+// EQUALITY
+console.log(movements.some(mov => mov === -130));
+// CONDITION
+const anyDeposits = movements.some(mov => mov > 0);
+console.log(anyDeposits);
+
+// EVERY METHOD
+console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0));
+
+// SEPERATE CALLBACK
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+*/
